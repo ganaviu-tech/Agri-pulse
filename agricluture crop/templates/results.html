@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AgriPulse Results</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+.optimal{
+background:#d4edda;
+padding:20px;
+border-radius:10px;
+}
+
+.deficient{
+background:#fff3cd;
+padding:20px;
+border-radius:10px;
+}
+
+.critical{
+background:#f8d7da;
+padding:20px;
+border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body class="container mt-5">
+
+
+<h2 class="mb-4">🌾 Soil Analysis Results</h2>
+
+
+{% for r in results %}
+
+<div class="card p-4 mb-4">
+
+<h5>Soil ID: {{ r.soil_id }}</h5>
+
+<p><strong>Target Crop:</strong> {{ r.target_crop }}</p>
+
+
+{% if r.health_metrics.overall_health == "Optimal" %}
+<div class="optimal">
+
+{% elif r.health_metrics.overall_health == "Deficient" %}
+<div class="deficient">
+
+{% else %}
+<div class="critical">
+{% endif %}
+
+<p><strong>Overall Health:</strong> {{ r.health_metrics.overall_health }}</p>
+
+<p><strong>Suitability Score:</strong> {{ r.recommendation.suitability_score }}%</p>
+
+
+<p><strong>Critical Deficiencies:</strong>
+{{ r.health_metrics.critical_deficiencies }}
+</p>
+
+
+<p><strong>Fertilizer Plan:</strong>
+{{ r.recommendation.fertilizer_plan }}
+</p>
+
+
+<p><strong>AI Explanation:</strong>
+{{ r.ai_explanation }}
+</p>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+
+<h3 class="mt-4">JSON Output (Required Schema)</h3>
+
+<pre>{{ results | tojson(indent=2) }}</pre>
+
+
+<a href="/" class="btn btn-success mt-4">
+
+Analyze Another Soil
+
+</a>
+
+
+</body>
+</html>
